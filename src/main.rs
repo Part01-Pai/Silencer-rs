@@ -167,7 +167,7 @@ impl eframe::App for FocusMuteApp {
             ui.add_space(5.0);
             ui.horizontal(|ui| {
                 ui.add_space(10.0);
-                ui.label(egui::RichText::new("FocusMute 智能静音").strong());
+                ui.label(egui::RichText::new("Silencer-rs 智能静音").strong());
                 
                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                     ui.add_space(10.0);
@@ -188,8 +188,8 @@ impl eframe::App for FocusMuteApp {
                     // Project Link
                     ui.hyperlink_to("项目地址", "https://github.com/Part01-Pai");
                     ui.separator();
-                    // Sponsor Button
-                    if ui.button("赞助支持").clicked() {
+                    // Sponsor Button (milk tea)
+                    if ui.button("请你喝杯奶茶叭").clicked() {
                         self.show_sponsor = !self.show_sponsor;
                     }
                 });
@@ -198,14 +198,26 @@ impl eframe::App for FocusMuteApp {
         });
 
         if self.show_sponsor {
-            egui::Window::new("感谢您的支持！")
+            egui::Window::new("请你喝杯奶茶叭")
                 .open(&mut self.show_sponsor)
                 .resizable(false)
                 .collapsible(false)
                 .anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0])
                 .show(ctx, |ui| {
                     ui.vertical_centered(|ui| {
-                        ui.add(egui::Image::new(egui::include_image!("../photo/zanzhu.png")).max_width(300.0));
+                        ui.label("如果此项目能帮助到您，我万分荣幸，或者您愿意请我喝杯奶茶 Oᴗoಣ");
+                        ui.add_space(8.0);
+                        ui.horizontal(|ui| {
+                            ui.vertical(|ui| {
+                                ui.label("微信奶茶 🍦");
+                                ui.add(egui::Image::new(egui::include_image!("../photo/zanzhu_weixin.png")).max_width(180.0));
+                            });
+                            ui.add_space(12.0);
+                            ui.vertical(|ui| {
+                                ui.label("支付宝奶茶 🍰");
+                                ui.add(egui::Image::new(egui::include_image!("../photo/zanzhu_zhifubao.png")).max_width(180.0));
+                            });
+                        });
                         ui.add_space(10.0);
                         ui.label("您的支持是我持续开发的动力！");
                     });
