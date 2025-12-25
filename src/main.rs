@@ -28,7 +28,7 @@ impl Default for Config {
     }
 }
 
-struct FocusMuteApp {
+struct SilencerApp {
     config: Config,
     is_running: bool,
     audio_manager: AudioManager,
@@ -60,7 +60,7 @@ unsafe extern "system" fn win_event_callback(
     }
 }
 
-impl FocusMuteApp {
+impl SilencerApp {
     fn new(cc: &eframe::CreationContext<'_>) -> Self {
         // Initialize image loaders
         egui_extras::install_image_loaders(&cc.egui_ctx);
@@ -90,7 +90,7 @@ impl FocusMuteApp {
         for (name, path) in font_configs {
             if let Ok(font_data) = std::fs::read(path) {
                 fonts.font_data.insert(name.to_owned(), egui::FontData::from_owned(font_data));
-                // 每次插入到索引 0，所以数组中最后的 simsun 会排在最前面
+                // 每次插入到索�?0，所以数组中最后的 simsun 会排在最前面
                 fonts.families.get_mut(&egui::FontFamily::Proportional).unwrap().insert(0, name.to_owned());
                 fonts.families.get_mut(&egui::FontFamily::Monospace).unwrap().insert(0, name.to_owned());
             }
@@ -191,7 +191,7 @@ impl FocusMuteApp {
     }
 }
 
-impl Drop for FocusMuteApp {
+impl Drop for SilencerApp {
     fn drop(&mut self) {
         if let Some(handle) = self.hook_handle {
             unsafe {
@@ -201,7 +201,7 @@ impl Drop for FocusMuteApp {
     }
 }
 
-impl eframe::App for FocusMuteApp {
+impl eframe::App for SilencerApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         // Top Header Bar
         egui::TopBottomPanel::top("header_bar").show(ctx, |ui| {
@@ -213,16 +213,16 @@ impl eframe::App for FocusMuteApp {
                 ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                     ui.add_space(10.0);
                     // Author Info - Collapsible/Clickable
-                    ui.menu_button("👤 作者信息", |ui| {
+                    ui.menu_button("👤 作者信�?, |ui| {
                         ui.set_min_width(180.0);
                         ui.vertical(|ui| {
-                            ui.add(egui::Label::new(egui::RichText::new("作者: Pai").strong()).selectable(false));
+                            ui.add(egui::Label::new(egui::RichText::new("作�? Pai").strong()).selectable(false));
                             ui.add(egui::Label::new(egui::RichText::new("邮箱: 1421493444@qq.com").size(11.0)).selectable(false));
                         });
                     });
                     ui.separator();
                     // Help Button
-                    if ui.button("❓ 使用说明").clicked() {
+                    if ui.button("�?使用说明").clicked() {
                         self.show_help = !self.show_help;
                     }
                     ui.separator();
@@ -230,7 +230,7 @@ impl eframe::App for FocusMuteApp {
                     ui.hyperlink_to("项目地址", "https://github.com/Part01-Pai");
                     ui.separator();
                     // Sponsor Button (milk tea)
-                        if ui.button("请你喝杯奶茶叭 Oᴗoಣ").clicked() {
+                        if ui.button("请你喝杯奶茶�?Oᴗo�?).clicked() {
                         self.show_sponsor = !self.show_sponsor;
                     }
                 });
@@ -239,7 +239,7 @@ impl eframe::App for FocusMuteApp {
         });
 
         if self.show_sponsor {
-            egui::Window::new("请你喝杯奶茶叭")
+            egui::Window::new("请你喝杯奶茶�?)
                 .open(&mut self.show_sponsor)
                 .resizable(false)
                 .collapsible(false)
@@ -247,7 +247,7 @@ impl eframe::App for FocusMuteApp {
                 .show(ctx, |ui| {
                     ui.vertical_centered(|ui| {
                         ui.add_space(8.0);
-                        ui.label("如果此项目能帮助到您，我万分荣幸，或者您愿意请我喝杯奶茶 Oᴗoಣ");
+                        ui.label("如果此项目能帮助到您，我万分荣幸，或者您愿意请我喝杯奶茶 Oᴗo�?);
                         ui.add_space(12.0);
                         ui.horizontal(|ui| {
                             ui.vertical(|ui| {
@@ -260,7 +260,7 @@ impl eframe::App for FocusMuteApp {
                             });
                             ui.add_space(12.0);
                             ui.vertical(|ui| {
-                                ui.label("支付宝奶茶 🍰");
+                                ui.label("支付宝奶�?🍰");
                                 if let Some(texture) = &self.alipay_qr {
                                     ui.add(egui::Image::from_texture(texture).max_width(120.0));
                                 } else {
@@ -269,7 +269,7 @@ impl eframe::App for FocusMuteApp {
                             });
                         });
                         ui.add_space(10.0);
-                        ui.label("您的支持是我持续开发的动力！");
+                        ui.label("您的支持是我持续开发的动力�?);
                     });
                 });
         }
@@ -281,26 +281,26 @@ impl eframe::App for FocusMuteApp {
                 .default_width(400.0)
                 .show(ctx, |ui| {
                     egui::ScrollArea::vertical().show(ui, |ui| {
-                        ui.collapsing("✨ 核心功能介绍", |ui| {
-                            ui.label("本软件可以根据窗口的前后台状态，自动控制音频合成器的静音开关。");
-                            ui.label("• 黑名单模式：列表中的应用在后台时静音。");
-                            ui.label("• 白名单模式：除列表和前台应用外，全部静音。");
+                        ui.collapsing("�?核心功能介绍", |ui| {
+                            ui.label("本软件可以根据窗口的前后台状态，自动控制音频合成器的静音开关�?);
+                            ui.label("�?黑名单模式：列表中的应用在后台时静音�?);
+                            ui.label("�?白名单模式：除列表和前台应用外，全部静音�?);
                         });
 
                         ui.add_space(10.0);
 
                         ui.collapsing("🔍 添加应用 vs 添加实例", |ui| {
-                            ui.strong("1. ➕ 添加应用 (按进程名)");
-                            ui.label("• 范围：控制该软件的所有窗口。");
-                            ui.label("• 场景：适合普通软件。只要你在用该软件的任何一个窗口，它就不会静音。");
-                            ui.label("• 持久性：重启软件后依然有效。");
+                            ui.strong("1. �?添加应用 (按进程名)");
+                            ui.label("�?范围：控制该软件的所有窗口�?);
+                            ui.label("�?场景：适合普通软件。只要你在用该软件的任何一个窗口，它就不会静音�?);
+                            ui.label("�?持久性：重启软件后依然有效�?);
                             
                             ui.add_space(5.0);
                             
-                            ui.strong("2. 🆔 添加实例 (按 PID)");
-                            ui.label("• 范围：仅控制当前选中的这一个特定窗口。");
-                            ui.label("• 场景：适合多开游戏。可以实现“大号有声，小号静音”的精准控制。");
-                            ui.label("• 持久性：仅本次运行有效（PID 重启会变）。");
+                            ui.strong("2. 🆔 添加实例 (�?PID)");
+                            ui.label("�?范围：仅控制当前选中的这一个特定窗口�?);
+                            ui.label("�?场景：适合多开游戏。可以实现“大号有声，小号静音”的精准控制�?);
+                            ui.label("�?持久性：仅本次运行有效（PID 重启会变）�?);
                         });
                     });
                 });
@@ -315,10 +315,8 @@ impl eframe::App for FocusMuteApp {
             event_triggered = true;
         }
 
-        // 核心修复：
-        // 1. 增加 50ms 的防抖（Debounce），防止极速切屏时的性能抖动
-        // 2. 增加 200ms 的周期性强制同步，确保即使错过事件也能恢复正确状态
-        let now = std::time::Instant::now();
+        // 核心修复�?        // 1. 增加 50ms 的防抖（Debounce），防止极速切屏时的性能抖动
+        // 2. 增加 200ms 的周期性强制同步，确保即使错过事件也能恢复正确状�?        let now = std::time::Instant::now();
         if self.is_running {
             let elapsed = now.duration_since(self.last_audio_enforcement).as_millis();
             if (event_triggered && elapsed >= 50) || elapsed >= 200 {
@@ -336,7 +334,7 @@ impl eframe::App for FocusMuteApp {
                 .inner_margin(15.0)
                 .show(ui, |ui| {
                     ui.horizontal(|ui| {
-                        let button_text = if self.is_running { "停止运行" } else { "开始运行" };
+                        let button_text = if self.is_running { "停止运行" } else { "开始运�? };
                         let button_color = if self.is_running { egui::Color32::from_rgb(200, 50, 50) } else { egui::Color32::from_rgb(50, 150, 50) };
                         
                         if ui.add(egui::Button::new(egui::RichText::new(button_text).color(egui::Color32::WHITE).strong())
@@ -347,7 +345,7 @@ impl eframe::App for FocusMuteApp {
                         }
 
                         ui.add_space(10.0);
-                        ui.label(egui::RichText::new(format!("状态: {}", if self.is_running { "正在运行" } else { "已停止" })).size(16.0));
+                        ui.label(egui::RichText::new(format!("状�? {}", if self.is_running { "正在运行" } else { "已停�? })).size(16.0));
                         
                         ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                             if ui.button("🔄 刷新列表").clicked() {
@@ -363,12 +361,12 @@ impl eframe::App for FocusMuteApp {
             ui.horizontal(|ui| {
                 ui.label(egui::RichText::new("工作模式:").size(16.0));
                 ui.add_space(10.0);
-                if ui.selectable_label(!self.config.is_whitelist, "🚫 黑名单模式").clicked() {
+                if ui.selectable_label(!self.config.is_whitelist, "🚫 黑名单模�?).clicked() {
                     self.config.is_whitelist = false;
                     self.update_audio();
                 }
                 ui.add_space(5.0);
-                if ui.selectable_label(self.config.is_whitelist, "✅ 白名单模式").clicked() {
+                if ui.selectable_label(self.config.is_whitelist, "�?白名单模�?).clicked() {
                     self.config.is_whitelist = true;
                     self.update_audio();
                 }
@@ -409,7 +407,7 @@ impl eframe::App for FocusMuteApp {
                                             
                                             ui.add_space(5.0);
                                             ui.horizontal(|ui| {
-                                                if ui.button("➕ 添加应用").clicked() {
+                                                if ui.button("�?添加应用").clicked() {
                                                     to_add = Some(session.name.clone());
                                                 }
                                                 if ui.button("🆔 添加实例").clicked() {
@@ -500,6 +498,6 @@ fn main() -> eframe::Result {
     eframe::run_native(
         "Silencer-rs",
         options,
-        Box::new(|cc| Ok(Box::new(FocusMuteApp::new(cc)))),
+        Box::new(|cc| Ok(Box::new(SilencerApp::new(cc)))),
     )
 }

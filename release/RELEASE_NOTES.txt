@@ -1,11 +1,11 @@
-﻿FocusMute Windows 发布说明
+﻿Silencer-rs Windows 发布说明
 
 包含文件：
 
-focusmute.exe
+silencer-rs.exe
 README.md
 README-en.md
 运行：
 
-解压后打开解压出的文件夹，直接双击 focusmute.exe 启动，或在命令行中运行：
-.\focusmute.exe
+解压后打开解压出的文件夹，直接双击 silencer-rs.exe 启动，或在命令行中运行：
+.\silencer-rs.exe
