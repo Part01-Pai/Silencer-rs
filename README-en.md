@@ -1,6 +1,6 @@
 ﻿# Silencer-rs
 
-Silencer-rs is a Rust refactor of https://github.com/AsterNighT/silencer (formerly FocusMute). During the refactor we fixed several known bugs, notably the fast window-switch audio leak (event debouncing + periodic sync).
+Silencer-rs is a Rust refactor of https://github.com/AsterNighT/silencer. During the refactor we fixed several known bugs, notably the fast window-switch audio leak (event debouncing + periodic sync).
 
 ## Overview
 
