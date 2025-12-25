@@ -49,14 +49,14 @@ cargo run --release
 - 进程名获取改进：若 `GetModuleBaseNameW` 失败，尝试 `QueryFullProcessImageNameW`；兜底显示为 进程 (PID) 以便识别。
 - 多实例自动编号：当发现多个同名进程时自动标注 `进程名 (1)`、`进程名 (2)` 等。
 
-## 赞助
+## 请你喝杯奶茶叭
 
 如果此项目能帮助到您，我万分荣幸，或者您愿意请我喝杯奶茶 Oᴗoಣ
 
-微信赞助：
+微信奶茶🍦：
 
-![微信赞助](photo/zanzhu_weixin.png)
+![微信奶茶](photo/zanzhu_weixin.png)
 
-支付宝赞助：
+支付宝奶茶🍰：
 
-![支付宝赞助](photo/zanzhu_zhifubao.png)
+![支付宝奶茶](photo/zanzhu_zhifubao.png)

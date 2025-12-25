@@ -49,14 +49,14 @@ cargo run --release
 - Better process name retrieval: fall back to `QueryFullProcessImageNameW`, and show `process (PID)` if unavailable.
 - Multi-instance numbering: auto-number same-name processes.
 
-## Sponsor
+## Buy me a milk tea
 
 If this project helped you, I'd be very grateful — or you can buy me a milk tea Oᴗoಣ
 
-WeChat:
+WeChat milk tea 🍦:
 
-![WeChat Sponsor](photo/zanzhu_weixin.png)
+![WeChat milk tea](photo/zanzhu_weixin.png)
 
-Alipay:
+Alipay milk tea 🍰:
 
-![Alipay Sponsor](photo/zanzhu_zhifubao.png)
+![Alipay milk tea](photo/zanzhu_zhifubao.png)
