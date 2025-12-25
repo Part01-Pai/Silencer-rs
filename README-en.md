@@ -51,6 +51,12 @@ cargo run --release
 
 ## Sponsor
 
-If you want to support the project, donations are welcome  thank you!
+If this project helped you, I'd be very grateful — or you can buy me a milk tea Oᴗoಣ
 
-![Sponsor](photo/zanzhu.png)
+WeChat:
+
+![WeChat Sponsor](photo/zanzhu_weixin.png)
+
+Alipay:
+
+![Alipay Sponsor](photo/zanzhu_zhifubao.png)

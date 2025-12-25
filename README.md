@@ -53,4 +53,10 @@ cargo run --release
 
 如果此项目能帮助到您，我万分荣幸，或者您愿意请我喝杯奶茶 Oᴗoಣ
 
-![赞助](photo/zanzhu.png)
+微信赞助：
+
+![微信赞助](photo/zanzhu_weixin.png)
+
+支付宝赞助：
+
+![支付宝赞助](photo/zanzhu_zhifubao.png)
