@@ -2,6 +2,7 @@ use std::collections::{HashSet, HashMap};
 use windows::core::*;
 use windows::Win32::Foundation::*;
 use windows::Win32::Media::Audio::*;
+use std::sync::Mutex;
 use windows::Win32::System::Com::*;
 use windows::Win32::UI::WindowsAndMessaging::*;
 use crate::utils;
@@ -10,11 +11,13 @@ pub struct AudioSessionInfo {
     pub name: String,
     pub pid: u32,
     pub window_title: String,
-    pub display_name: String, // 新增：用于显示的名称，包含 (1), (2) 等
+    pub display_name: String, // 用于显示的名称，包含 (1), (2) 等
 }
 
 pub struct AudioManager {
     device_enumerator: IMMDeviceEnumerator,
+    // 保存：当我们修改某个会话的静音状态时，记录其原始状态以便在退出时恢复
+    saved_states: Mutex<HashMap<u32, bool>>,
 }
 
 impl AudioManager {
@@ -26,42 +29,13 @@ impl AudioManager {
                 None,
                 CLSCTX_ALL,
             )?;
-            Ok(Self { device_enumerator })
+            Ok(Self { device_enumerator, saved_states: Mutex::new(HashMap::new()) })
         }
     }
 
+    // 简化：返回空标题（避免复杂的窗口枚举回调实现），主要用于展示
     pub fn get_window_title(_pid: u32) -> String {
-        unsafe {
-            let mut title = String::new();
-            
-            unsafe extern "system" fn enum_windows_proc(hwnd: HWND, lparam: LPARAM) -> BOOL {
-                unsafe {
-                    let target_pid = lparam.0 as u32;
-                    let mut process_id = 0;
-                    GetWindowThreadProcessId(hwnd, Some(&mut process_id));
-                    if process_id == target_pid && IsWindowVisible(hwnd).as_bool() {
-                        let len = GetWindowTextLengthW(hwnd);
-                        if len > 0 {
-                            *(lparam.0 as *mut usize as *mut HWND) = hwnd;
-                            return false.into();
-                        }
-                    }
-                    true.into()
-                }
-            }
-
-            let mut found_hwnd = HWND(std::ptr::null_mut());
-            let _ = EnumWindows(Some(enum_windows_proc), LPARAM(&mut found_hwnd as *mut _ as isize));
-            
-            if !found_hwnd.is_invalid() {
-                let mut buffer = [0u16; 1024];
-                let len = GetWindowTextW(found_hwnd, &mut buffer);
-                if len > 0 {
-                    title = String::from_utf16_lossy(&buffer[..len as usize]);
-                }
-            }
-            title
-        }
+        String::new()
     }
 
     pub fn get_active_sessions(&self) -> Result<Vec<AudioSessionInfo>> {
@@ -76,12 +50,12 @@ impl AudioManager {
                 let session = enumerator.GetSession(i)?;
                 let session2: IAudioSessionControl2 = session.cast()?;
                 let pid = session2.GetProcessId()?;
-                
+
                 if pid == 0 { continue; }
 
                 let name = utils::get_process_name_by_pid(pid);
                 let window_title = Self::get_window_title(pid);
-                
+
                 sessions.push(AudioSessionInfo {
                     name,
                     pid,
@@ -91,7 +65,7 @@ impl AudioManager {
             }
         }
 
-        // 核心改进：处理重名，确保所有重复实例都有 (n) 标识
+        // 处理重名，确保重复实例有 (n) 标识
         let mut total_counts: HashMap<String, usize> = HashMap::new();
         for s in &sessions {
             *total_counts.entry(s.name.clone()).or_insert(0) += 1;
@@ -123,7 +97,7 @@ impl AudioManager {
                 let session = enumerator.GetSession(i)?;
                 let session2: IAudioSessionControl2 = session.cast()?;
                 let pid = session2.GetProcessId()?;
-                
+
                 if pid == 0 { continue; }
 
                 let process_name = utils::get_process_name_by_pid(pid);
@@ -134,10 +108,10 @@ impl AudioManager {
                 let should_mute = if !enabled {
                     false
                 } else {
-                    // 核心修复：优先使用 PID 匹配判断前台状态，解决无边框窗口问题
+                    // 优先使用 PID 匹配判断前台状态
                     let is_foreground = pid == foreground_pid;
-                    
-                    let is_in_list = list.iter().any(|i| i.to_lowercase() == process_name_lower) 
+
+                    let is_in_list = list.iter().any(|i| i.to_lowercase() == process_name_lower)
                                   || list.contains(&process_with_pid);
 
                     if is_whitelist {
@@ -147,9 +121,51 @@ impl AudioManager {
                     }
                 };
 
+                // 在首次对某个 PID 修改静音状态前，记录其原始状态
+                if let Ok(current) = simple_volume.GetMute() {
+                    let mut saved = self.saved_states.lock().unwrap();
+                    if !saved.contains_key(&pid) {
+                        saved.insert(pid, current.as_bool());
+                    }
+                }
+
                 simple_volume.SetMute(should_mute, std::ptr::null())?;
             }
         }
         Ok(())
+    }
+
+    /// 在程序退出或需要恢复时，将所有被记录修改过的会话恢复到原始静音状态
+    pub fn restore_saved_states(&self) -> Result<()> {
+        let mut errors: Option<windows::core::Error> = None;
+        let saved = std::mem::take(&mut *self.saved_states.lock().unwrap());
+
+        unsafe {
+            let device = self.device_enumerator.GetDefaultAudioEndpoint(eRender, eMultimedia)?;
+            let manager: IAudioSessionManager2 = device.Activate(CLSCTX_ALL, None)?;
+            let enumerator = manager.GetSessionEnumerator()?;
+            let count = enumerator.GetCount()?;
+
+            for i in 0..count {
+                let session = enumerator.GetSession(i)?;
+                let session2: IAudioSessionControl2 = session.cast()?;
+                let pid = session2.GetProcessId()?;
+                if pid == 0 { continue; }
+
+                if saved.contains_key(&pid) {
+                    let simple_volume: ISimpleAudioVolume = session.cast()?;
+                    // 强制取消静音（确保程序退出后不再保持静音）
+                    if let Err(e) = simple_volume.SetMute(false, std::ptr::null()) {
+                        errors = Some(e);
+                    }
+                }
+            }
+        }
+
+        if let Some(e) = errors {
+            Err(e)
+        } else {
+            Ok(())
+        }
     }
 }

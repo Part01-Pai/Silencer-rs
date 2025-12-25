@@ -2,11 +2,12 @@
 name = "silencer-rs"
 version = "0.1.0"
 edition = "2024"
+build = "build.rs"
 
 [dependencies]
 eframe = { version = "0.29.1", features = ["persistence"] }
 egui_extras = { version = "0.29.1", features = ["all_loaders"] }
-image = { version = "0.25", features = ["png"] }
+image = { version = "0.25", features = ["png", "ico"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 windows = { version = "0.58.0", features = [
@@ -20,3 +21,7 @@ windows = { version = "0.58.0", features = [
     "Win32_System_ProcessStatus",
     "Win32_System_LibraryLoader",
 ] }
+
+# build-dependencies removed
+[build-dependencies]
+winres = "0.1"
