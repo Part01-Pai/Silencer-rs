@@ -15,7 +15,7 @@ Silencer-rs automatically mutes or unmutes background applications based on the 
 - Multi-instance support: distinguish processes by name and PID, auto-number identical names.
 - Modern UI: built with `egui` and `eframe`.
 
-## Prerequisites
+## Environment
 
 - Rust (stable)
 - Windows (uses WASAPI and Win32 APIs)
@@ -33,7 +33,7 @@ cargo build --release
 cargo run --release
 ```
 
-## Implementation Details
+## Implementation
 
 - UI: `egui` + `eframe`.
 - Windows API: `windows` (windows-rs) for Win32/COM.

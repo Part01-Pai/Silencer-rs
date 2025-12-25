@@ -15,7 +15,7 @@ Silencer-rs 会根据当前前台窗口自动静音或恢复后台应用的声�
 - 多实例区分：支持按进程名与 PID 区分不同实例，并自动编号同名进程。
 - 现代化 UI：基于 `egui` 与 `eframe` 的卡片式界面。
 
-## 先决条件
+## 环境
 
 - Rust（stable）
 - Windows（使用 WASAPI 与 Win32 API）
@@ -33,7 +33,7 @@ cargo build --release
 cargo run --release
 ```
 
-## 实现细节
+## 实现
 
 - UI：使用 [egui](https://github.com/emilk/egui) 与 `eframe`。
 - Windows API：使用 `windows`（windows-rs）调用 Win32/COM 接口。
