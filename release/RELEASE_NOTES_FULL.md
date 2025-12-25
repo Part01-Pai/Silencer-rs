@@ -49,20 +49,9 @@ cargo run --release
 - 进程名获取改进：若 `GetModuleBaseNameW` 失败，尝试 `QueryFullProcessImageNameW`；兜底显示为 进程 (PID) 以便识别。
 - 多实例自动编号：当发现多个同名进程时自动标注 `进程名 (1)`、`进程名 (2)` 等。
 
-## 请你喝杯奶茶叭
-
-如果此项目能帮助到您，我万分荣幸，或者您愿意请我喝杯奶茶 Oᴗoಣ
-
-微信奶茶🍦：
-
-![微信奶茶](photo/naicha_weixin.png)
-
-支付宝奶茶🍰：
-
-![支付宝奶茶](photo/naicha_zhifubao.png)
-
-
 ---
+
+# EN
 
 # Silencer-rs
 
@@ -114,16 +103,3 @@ cargo run --release
 - Borderless/fullscreen fix: match by PID instead of process name to handle proxy/multi-window cases.
 - Better process name retrieval: fall back to `QueryFullProcessImageNameW`, and show `process (PID)` if unavailable.
 - Multi-instance numbering: auto-number same-name processes.
-
-## Buy me a milk tea
-
-If this project helped you, I'd be very grateful — or you can buy me a milk tea Oᴗoಣ
-
-WeChat milk tea 🍦:
-
-![WeChat milk tea](photo/naicha_weixin.png)
-
-Alipay milk tea 🍰:
-
-![Alipay milk tea](photo/naicha_zhifubao.png)
-
