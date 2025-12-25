@@ -189,7 +189,7 @@ impl eframe::App for FocusMuteApp {
                     ui.hyperlink_to("项目地址", "https://github.com/Part01-Pai");
                     ui.separator();
                     // Sponsor Button (milk tea)
-                    if ui.button("请你喝杯奶茶叭").clicked() {
+                        if ui.button("请你喝杯奶茶叭 O_o").clicked() {
                         self.show_sponsor = !self.show_sponsor;
                     }
                 });
@@ -205,7 +205,6 @@ impl eframe::App for FocusMuteApp {
                 .anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0])
                 .show(ctx, |ui| {
                     ui.vertical_centered(|ui| {
-                        ui.label("如果此项目能帮助到您，我万分荣幸，或者您愿意请我喝杯奶茶 Oᴗoಣ");
                         ui.add_space(8.0);
                         ui.horizontal(|ui| {
                             ui.vertical(|ui| {
