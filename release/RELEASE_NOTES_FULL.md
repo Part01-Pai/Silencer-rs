@@ -55,11 +55,11 @@ cargo run --release
 
 微信奶茶🍦：
 
-![微信奶茶](photo/zanzhu_weixin.png)
+![微信奶茶](photo/naicha_weixin.png)
 
 支付宝奶茶🍰：
 
-![支付宝奶茶](photo/zanzhu_zhifubao.png)
+![支付宝奶茶](photo/naicha_zhifubao.png)
 
 
 ---
@@ -121,9 +121,9 @@ If this project helped you, I'd be very grateful — or you can buy me a milk te
 
 WeChat milk tea 🍦:
 
-![WeChat milk tea](photo/zanzhu_weixin.png)
+![WeChat milk tea](photo/naicha_weixin.png)
 
 Alipay milk tea 🍰:
 
-![Alipay milk tea](photo/zanzhu_zhifubao.png)
+![Alipay milk tea](photo/naicha_zhifubao.png)
 

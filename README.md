@@ -55,8 +55,8 @@ cargo run --release
 
 微信奶茶🍦：
 
-![微信奶茶](photo/zanzhu_weixin.png)
+![微信奶茶](photo/naicha_weixin.png)
 
 支付宝奶茶🍰：
 
-![支付宝奶茶](photo/zanzhu_zhifubao.png)
+![支付宝奶茶](photo/naicha_zhifubao.png)

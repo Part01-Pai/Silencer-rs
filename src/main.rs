@@ -209,13 +209,13 @@ impl eframe::App for FocusMuteApp {
                         ui.add_space(8.0);
                         ui.horizontal(|ui| {
                             ui.vertical(|ui| {
-                                ui.label("微信奶茶 🍦");
-                                ui.add(egui::Image::new(egui::include_image!("../photo/zanzhu_weixin.png")).max_width(180.0));
-                            });
+                                    ui.label("微信奶茶 🍦");
+                                    ui.add(egui::Image::new(egui::include_image!("../photo/naicha_weixin.png")).max_width(180.0));
+                                });
                             ui.add_space(12.0);
                             ui.vertical(|ui| {
                                 ui.label("支付宝奶茶 🍰");
-                                ui.add(egui::Image::new(egui::include_image!("../photo/zanzhu_zhifubao.png")).max_width(180.0));
+                                ui.add(egui::Image::new(egui::include_image!("../photo/naicha_zhifubao.png")).max_width(180.0));
                             });
                         });
                         ui.add_space(10.0);
