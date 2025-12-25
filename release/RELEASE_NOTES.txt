@@ -1,14 +1,11 @@
 ﻿FocusMute Windows 发布说明
 
 包含文件：
-- focusmute.exe（位于根目录或 target/release）
-- README.md（中文说明）
 
+focusmute.exe
+README.md
+README-en.md
 运行：
-1. 解压或将 `focusmute.exe` 放在相同目录下。
-2. 直接双击 `focusmute.exe` 启动，或在命令行中运行：
-   .\focusmute.exe
 
-注意事项：
-- 若使用 MSVC 构建，目标机器可能需要安装 Microsoft Visual C++ Redistributable。
-- 请确保在与目标系统架构匹配的工具链上构建（例如 x86_64-pc-windows-msvc）。
+解压后打开解压出的文件夹，直接双击 focusmute.exe 启动，或在命令行中运行：
+.\focusmute.exe
