@@ -230,7 +230,7 @@ impl eframe::App for FocusMuteApp {
                     ui.hyperlink_to("项目地址", "https://github.com/Part01-Pai");
                     ui.separator();
                     // Sponsor Button (milk tea)
-                        if ui.button("请你喝杯奶茶叭 O◡oಣ").clicked() {
+                        if ui.button("请你喝杯奶茶叭 Oᴗoಣ").clicked() {
                         self.show_sponsor = !self.show_sponsor;
                     }
                 });
@@ -247,10 +247,10 @@ impl eframe::App for FocusMuteApp {
                 .show(ctx, |ui| {
                     ui.vertical_centered(|ui| {
                         ui.add_space(8.0);
-                        ui.label("如果此项目能帮助到您，我万分荣幸，或者您愿意请我喝杯奶茶 O◡oಣ");
+                        ui.label("如果此项目能帮助到您，我万分荣幸，或者您愿意请我喝杯奶茶 Oᴗoಣ");
                         ui.add_space(12.0);
-                        ui.columns(2, |columns| {
-                            columns[0].vertical_centered(|ui| {
+                        ui.horizontal(|ui| {
+                            ui.vertical(|ui| {
                                 ui.label("微信奶茶 🍦");
                                 if let Some(texture) = &self.wechat_qr {
                                     ui.add(egui::Image::from_texture(texture).max_width(120.0));
@@ -258,7 +258,8 @@ impl eframe::App for FocusMuteApp {
                                     ui.label("图片加载失败");
                                 }
                             });
-                            columns[1].vertical_centered(|ui| {
+                            ui.add_space(12.0);
+                            ui.vertical(|ui| {
                                 ui.label("支付宝奶茶 🍰");
                                 if let Some(texture) = &self.alipay_qr {
                                     ui.add(egui::Image::from_texture(texture).max_width(120.0));
