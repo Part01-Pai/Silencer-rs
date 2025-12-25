@@ -51,7 +51,7 @@ cargo run --release
 
 ## Buy me a milk tea
 
-If this project helped you, I'd be very grateful — or you can buy me a milk tea Oᴗoಣ
+If this project helped you, I'd be very grateful — or you can buy me a milk tea O◡oಣ
 
 WeChat milk tea 🍦:
 

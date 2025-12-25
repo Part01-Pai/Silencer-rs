@@ -40,6 +40,8 @@ struct FocusMuteApp {
     last_audio_enforcement: std::time::Instant,
     show_sponsor: bool,
     show_help: bool,
+    wechat_qr: Option<egui::TextureHandle>,
+    alipay_qr: Option<egui::TextureHandle>,
 }
 
 static EVENT_SENDER: OnceLock<Sender<()>> = OnceLock::new();
@@ -73,20 +75,24 @@ impl FocusMuteApp {
         visuals.widgets.open.rounding = 8.0.into();
         cc.egui_ctx.set_visuals(visuals);
 
-        // Load Chinese font if available
+        // Load fonts with specific priority
         let mut fonts = egui::FontDefinitions::default();
-        let font_paths = [
-            "C:\\Windows\\Fonts\\msyh.ttc",
-            "C:\\Windows\\Fonts\\msyh.ttf",
-            "C:\\Windows\\Fonts\\simhei.ttf",
+        
+        // Font paths to try, in order of fallback (last one is highest priority in the loop below)
+        let font_configs = [
+            ("emoji", "C:\\Windows\\Fonts\\seguiemj.ttf"),
+            ("symbol", "C:\\Windows\\Fonts\\seguisym.ttf"),
+            ("nirmala", "C:\\Windows\\Fonts\\Nirmala.ttf"),
+            ("msyh", "C:\\Windows\\Fonts\\msyh.ttc"),
+            ("simsun", "C:\\Windows\\Fonts\\simsun.ttc"),   // 恢复宋体
         ];
 
-        for path in font_paths {
+        for (name, path) in font_configs {
             if let Ok(font_data) = std::fs::read(path) {
-                fonts.font_data.insert("chinese_font".to_owned(), egui::FontData::from_owned(font_data));
-                fonts.families.get_mut(&egui::FontFamily::Proportional).unwrap().insert(0, "chinese_font".to_owned());
-                fonts.families.get_mut(&egui::FontFamily::Monospace).unwrap().push("chinese_font".to_owned());
-                break;
+                fonts.font_data.insert(name.to_owned(), egui::FontData::from_owned(font_data));
+                // 每次插入到索引 0，所以数组中最后的 simsun 会排在最前面
+                fonts.families.get_mut(&egui::FontFamily::Proportional).unwrap().insert(0, name.to_owned());
+                fonts.families.get_mut(&egui::FontFamily::Monospace).unwrap().insert(0, name.to_owned());
             }
         }
         cc.egui_ctx.set_fonts(fonts);
@@ -117,6 +123,39 @@ impl FocusMuteApp {
         let audio_manager = AudioManager::new().expect("Failed to initialize audio manager");
         let active_sessions = audio_manager.get_active_sessions().unwrap_or_default();
 
+        // Load QR codes manually to ensure they display
+        let wechat_qr = {
+            let bytes = include_bytes!("../photo/naicha_weixin.png");
+            if let Ok(image) = image::load_from_memory(bytes) {
+                let size = [image.width() as _, image.height() as _];
+                let image_buffer = image.to_rgba8();
+                let pixels = image_buffer.as_flat_samples();
+                Some(cc.egui_ctx.load_texture(
+                    "wechat_qr",
+                    egui::ColorImage::from_rgba_unmultiplied(size, pixels.as_slice()),
+                    Default::default(),
+                ))
+            } else {
+                None
+            }
+        };
+
+        let alipay_qr = {
+            let bytes = include_bytes!("../photo/naicha_zhifubao.png");
+            if let Ok(image) = image::load_from_memory(bytes) {
+                let size = [image.width() as _, image.height() as _];
+                let image_buffer = image.to_rgba8();
+                let pixels = image_buffer.as_flat_samples();
+                Some(cc.egui_ctx.load_texture(
+                    "alipay_qr",
+                    egui::ColorImage::from_rgba_unmultiplied(size, pixels.as_slice()),
+                    Default::default(),
+                ))
+            } else {
+                None
+            }
+        };
+
         Self {
             config,
             is_running: false,
@@ -129,6 +168,8 @@ impl FocusMuteApp {
             last_audio_enforcement: std::time::Instant::now(),
             show_sponsor: false,
             show_help: false,
+            wechat_qr,
+            alipay_qr,
         }
     }
 
@@ -189,7 +230,7 @@ impl eframe::App for FocusMuteApp {
                     ui.hyperlink_to("项目地址", "https://github.com/Part01-Pai");
                     ui.separator();
                     // Sponsor Button (milk tea)
-                    if ui.button("请你喝杯奶茶叭").clicked() {
+                        if ui.button("请你喝杯奶茶叭 O◡oಣ").clicked() {
                         self.show_sponsor = !self.show_sponsor;
                     }
                 });
@@ -205,17 +246,25 @@ impl eframe::App for FocusMuteApp {
                 .anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0])
                 .show(ctx, |ui| {
                     ui.vertical_centered(|ui| {
-                        ui.label("如果此项目能帮助到您，我万分荣幸，或者您愿意请我喝杯奶茶 Oᴗoಣ");
                         ui.add_space(8.0);
-                        ui.horizontal(|ui| {
-                            ui.vertical(|ui| {
-                                    ui.label("微信奶茶 🍦");
-                                    ui.add(egui::Image::new(egui::include_image!("../photo/naicha_weixin.png")).max_width(180.0));
-                                });
-                            ui.add_space(12.0);
-                            ui.vertical(|ui| {
+                        ui.label("如果此项目能帮助到您，我万分荣幸，或者您愿意请我喝杯奶茶 O◡oಣ");
+                        ui.add_space(12.0);
+                        ui.columns(2, |columns| {
+                            columns[0].vertical_centered(|ui| {
+                                ui.label("微信奶茶 🍦");
+                                if let Some(texture) = &self.wechat_qr {
+                                    ui.add(egui::Image::from_texture(texture).max_width(120.0));
+                                } else {
+                                    ui.label("图片加载失败");
+                                }
+                            });
+                            columns[1].vertical_centered(|ui| {
                                 ui.label("支付宝奶茶 🍰");
-                                ui.add(egui::Image::new(egui::include_image!("../photo/naicha_zhifubao.png")).max_width(180.0));
+                                if let Some(texture) = &self.alipay_qr {
+                                    ui.add(egui::Image::from_texture(texture).max_width(120.0));
+                                } else {
+                                    ui.label("图片加载失败");
+                                }
                             });
                         });
                         ui.add_space(10.0);
@@ -448,7 +497,7 @@ fn main() -> eframe::Result {
         ..Default::default()
     };
     eframe::run_native(
-        "FocusMute",
+        "Silencer-rs",
         options,
         Box::new(|cc| Ok(Box::new(FocusMuteApp::new(cc)))),
     )
