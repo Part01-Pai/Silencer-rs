@@ -4,7 +4,7 @@ Silencer-rs is a Rust refactor of https://github.com/AsterNighT/silencer (former
 
 ## Overview
 
-Silencer-rs automatically mutes or unmutes background applications based on the foreground window, preventing unwanted sounds when switching windows or playing games.
+Silencer-rs automatically mutes or unmutes background applications based on the foreground window, preventing unwanted sounds when switching windows or playing games. Example scenario: when running Delta Force with its official launcher alongside a WeGame second instance and switching while minimized, the background game may fail to auto-mute.
 
 ## Features
 
