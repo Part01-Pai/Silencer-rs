@@ -3,7 +3,6 @@
 包含文件：
 - focusmute.exe（位于根目录或 target/release）
 - README.md（中文说明）
-- photo/（程序所需图片资源，包括赞助图）
 
 运行：
 1. 解压或将 `focusmute.exe` 放在相同目录下。
