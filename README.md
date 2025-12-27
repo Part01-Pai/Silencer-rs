@@ -1,6 +1,6 @@
 ﻿# Silencer-rs
 
-本项目由 https://github.com/AsterNighT/silencer 使用 Rust 重构而来（原名 FocusMute），在重构过程中修复若干已知 bug，重点修复了快速切换窗口时的漏音问题（事件防抖 + 周期同步）。
+本项目由 https://github.com/AsterNighT/silencer 使用 Rust 重构而来，在重构过程中修复若干已知 bug，重点修复了快速切换窗口时的漏音问题（事件防抖 + 周期同步）。
 
 ## 项目简介
 
